@@ -1,0 +1,29 @@
+name: pullrequest
+on: [pull_request]
+
+env:
+  IMAGE: docker.pkg.github.com/seriousben/club-canin-aylmer-members/site
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Docker build
+        run: |
+          docker build -t "$IMAGE":"$GITHUB_SHA" \
+            --build-arg GITHUB_SHA="$GITHUB_SHA" \
+            --build-arg GITHUB_REF="$GITHUB_REF" .
+
+  kubectl-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Ensure manifest generation
+        uses: stefanprodan/kube-tools@v1
+        with:
+          kustomize: 3.2.1
+          command: |
+            kustomize build deploy/overlay > build-kustomized-overlay.yaml
+            diff -u build-kustomized-overlay.yaml deploy/manifests/kustomized-overlay.yaml
