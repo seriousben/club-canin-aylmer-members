@@ -1,0 +1,10 @@
+namespace: club-canin-aylmer-members
+commonLabels:
+  app.kubernetes.io/part-of: club-canin-aylmer-members
+  env: prod
+commonAnnotations:
+  seriousben.com/repo: "https://github.com/seriousben/club-canin-aylmer-members"
+resources:
+- ../base
+- namespace.yaml
+- role.yaml

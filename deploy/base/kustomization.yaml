@@ -1,0 +1,5 @@
+commonLabels:
+  app.kubernetes.io/name: club-canin-aylmer-members
+resources:
+- deployment.yaml
+- ingress.yaml
